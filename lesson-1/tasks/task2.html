@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<title>Задача 2</title>
+</head>
+<!-- Задача 2. Вводиться номер місяця. 
+	Автоматично виводити рекомендований одяг (зима – пальто, літо – шорти ….). 
+	Також автоматично виводити зображення з відповідним зображенням лісу (зима – ліс зі снігом, осінь – жовтий ліс, …).
+========================================================-->
+
+<body>
+	<div id="app">
+		<label>
+			<div>Оберіть місяць</div>
+			<input type="number" v-model="seasonCount" min="1" max="12">
+			<div v-html="seasonRecommendation"></div>
+
+			<img v-bind:src="seasonImage" alt="" style="width: 50%;">
+		</label>
+
+	</div>
+	<script>
+		const { createApp } = Vue;
+		const seasonsData = [{
+			'title': 'Зима',
+			'cloth': 'Пальто і шапку',
+			'image': 'image/winter.jpg',
+			'month': [12, 1, 2],
+		}, {
+			'title': 'Весна',
+			'cloth': 'Куртку і джинси',
+			'image': 'image/spring.jpg',
+			'month': [3, 4, 5],
+		}, {
+			'title': 'Літо',
+			'cloth': 'Шорти та футболку',
+			'image': 'image/summer.jpg',
+			'month': [6, 7, 8],
+		}, {
+			'title': 'Осінь',
+			'cloth': 'Куртку і джинси',
+			'image': 'image/autumn.jpg',
+			'month': [9, 10, 11],
+		}];
+		const app = createApp({
+			data() {
+				return {
+					seasonCount: null,
+				}
+			},
+			//знаходження сезонного одягу
+			computed: {
+				seasonRecommendation() {
+					if (this.seasonCount !== null) {
+						const selectedSeason = seasonsData.find(season => season.month.includes(this.seasonCount));
+						if (selectedSeason) {
+							return `<h4>Це ${selectedSeason.title}<h4>
+								<p>Краще вдягнути - ${selectedSeason.cloth}</p>`;
+						}
+
+					}
+				},
+				//знаходження сезонного фото
+				seasonImage() {
+					if (this.seasonCount !== null) {
+						const selectedSeason = seasonsData.find(season => season.month.includes(this.seasonCount));
+						if (selectedSeason) {
+							return selectedSeason.image;
+						}
+					}
+				},
+			},
+		});
+
+		app.mount('#app');
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<title>Задача 4</title>
+</head>
+<!-- Задача 4. “Рахунок у банку”
+Вимоги:
+1) Спочатку сума дорівнює 0грн. Змінити суму у гривнях можна або зарахуванням на рахунок, або зняттям.
+2) Сума автоматично переводиться у долари та євро (фіксований курс задається у data).
+3) можливість зарахувати суму (контролювати, щоб не була від’ємною)
+4) можливість зняти (щоб не можна зняти більше ніж є на рахунку)
+5) при виконанні зняття і зарахування коштів вираховувати 3% від суми (відображати кількість відсотків автоматично)
+
+При зміні суми :
+- якщо було зняття, то суму відоражати червоним
+- якщо було зарахування, то суму відображати зеленим
+Якщо сума валюти менша за 100 то відображати червоним кольором, інакше - зеленим
+
+========================================================-->
+
+<body>
+	<div id="app">
+		<h2>Сума на рахунку: <span :style="{ color: depositColor }">{{depositAmount}} грн</span></h2>
+		<div>
+			<label>Зарахувати на рахунок:
+				<input type="number" v-model="creditToDeposit" min="1">
+				<button @click="creditToAccount">Зарахувати</button>
+			</label>
+		</div>
+		<div>
+			<label for="">Зняти з рахунку:
+				<input type="number" v-model="withdrawFromDeposit" min="1">
+				<button @click="withdrawFromAccount">Зняти</button>
+			</label>
+		</div>
+		<p>Відсотки за обслуговування: {{bankInterest.toFixed(2)}}грн</p>
+		<hr>
+		<p>Сума на рахунку в доларах: ${{convertToDollars().toFixed(2)}}</p>
+		<p>Сума на рахунку в євро: €{{convertToEuros().toFixed(2)}}</p>
+
+
+	</div>
+
+
+	<script>
+		const { createApp } = Vue;
+		const app = createApp({
+			data() {
+				return {
+					depositAmount: 0,
+					depositColor: 'black',
+					creditToDeposit: 10,
+					withdrawFromDeposit: 10,
+					dollarRate: 38,
+					euroRate: 41,
+					bankInterest: 0,
+
+				};
+			},
+			methods: {
+				creditToAccount() {
+					if (this.creditToDeposit > 0) {
+						this.depositAmount += this.creditToDeposit;
+						this.bankInterest = this.creditToDeposit * 0.03;
+						this.depositColor = this.depositAmount >= 100 ? 'green' : 'red';
+					}
+				},
+				withdrawFromAccount() {
+					if (this.depositAmount >= this.withdrawFromDeposit) {
+						this.depositAmount -= this.withdrawFromDeposit;
+						this.bankInterest = this.withdrawFromDeposit * 0.03;
+						this.depositColor = 'red';
+
+					} else {
+						alert('На рахунку не достатньо коштів');
+					}
+				},
+				convertToDollars() {
+					return this.depositAmount / this.dollarRate;
+				},
+				convertToEuros() {
+					return this.depositAmount / this.euroRate;
+				},
+
+			},
+		});
+
+		app.mount('#app');
+
+	</script>
+
+</body>
+
+</html>

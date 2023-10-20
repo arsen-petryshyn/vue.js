@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<title>Задача 5</title>
+</head>
+<!-- Задача 5. 
+	Додаток містить масив об’єктів (логін, пароль) --  інсуючі логіни і паролі. Користувач вводить логін і пароль, а програма повідомляє чи може користувач бути авторизованим (чи є він одним з масиву).
+
+
+========================================================-->
+
+<body>
+	<div id="app">
+
+		<label for="login"> Логін
+			<input type="text" id="login" v-model="login">
+		</label>
+		<label for="password"> Пароль
+			<input type="password" id="password" v-model="password">
+		</label>
+		<button @click="confirmLogin">Підтвердити</button>
+
+	</div>
+
+
+	<script>
+		const { createApp } = Vue;
+
+		const app = createApp({
+			data() {
+				return {
+					login: "",
+					password: "",
+					isAuthenticated: false,
+					loginData: [
+						{
+							login: 'Ivan',
+							password: '123456',
+						},
+						{
+							login: 'Arsen',
+							password: '432765',
+						},
+						{
+							login: 'Dara',
+							password: '090909',
+						},
+					],
+				};
+			},
+			methods: {
+				confirmLogin() {
+
+					for (const user of this.loginData) {
+						if (user.login == this.login && user.password == this.password) {
+							this.isAuthenticated = true;
+							alert("Авторизація успішна");
+						}
+					}
+					if (this.isAuthenticated == false) { alert("Невірний логін або пароль спробуй login:Ivan password:123456") };
+
+				},
+			},
+		});
+
+		app.mount('#app');
+
+	</script>
+
+</body>
+
+</html>
