@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<title>Задача 2</title>
+</head>
+<!-- Задача 2. 
+	З випадаючого списку вибираємо клас квитка у літаку. 
+	Якщо 
+		1) бізнес -  виводимо елементи для вибору газети та коньяку (якщо вибрано коньяк, то запропонувати закуску (так/ні)), на фоні зображення бізнес кают 
+		2) економ – виводимо елементи для вибору типу пива і чипсів, на фоні хмарки.
+
+========================================================-->
+
+<body>
+	<div id="app">
+		<div>
+			<label> Оберіть клас квитка
+				<select v-model="ticketClass">
+					<option value="" selected>Оберіть варіант</option>
+					<option value="business">Бізнес</option>
+					<option value="econom">Економ</option>
+				</select>
+			</label>
+		</div>
+		<template v-if="businessClass">
+			<label> Додаткова послуга</label>
+			<select v-model="businessClassTicket">
+				<option value="" selected>Оберіть варіант</option>
+				<option value="newspaper">Газета</option>
+				<option value="alcohol">Коньяк</option>
+			</select>
+		</template>
+
+		<template v-if="economicClass">
+			<label> Додаткова послуга</label>
+			<select v-model="economicClassTicket">
+				<option value="" selected>Оберіть варіант</option>
+				<option value="drinkEconom" selected>Пиво</option>
+				<option value="snackEconom">Чипси</option>
+			</select>
+			<img style="display: block; width: 50%;" src="https://nuart.com.ua/wp-content/uploads/2019/12/9892.jpg"
+				alt="">
+		</template>
+		<template v-if="alcoholSelected">
+			<label> Бажаєте закуску?
+				<input type="radio" name="choice">
+				<span>Hi</span>
+			</label>
+			<label>
+				<input type="radio" name="choice">
+				<span>Так</span>
+			</label>
+		</template>
+		<img v-if="businessClass" style="display: block; width: 50%;"
+			src="https://www.avianews.com/wp-content/uploads/2023/05/139_flydubai_business_suite3-696x464.jpg" alt="">
+	</div>
+	<script>
+		const { createApp } = Vue;
+		const app = createApp({
+			data() {
+				return {
+					ticketClass: '',
+					businessClassTicket: '',
+					economicClassTicket: '',
+					businessSnackAdd: '',
+				}
+			},
+			//знаходження сезонного одягу
+
+			computed: {
+				businessClass() {
+					this.businessClassTicket = '';
+					return this.ticketClass === 'business';
+				},
+				economicClass() {
+					this.economicClassTicket = '';
+					return this.ticketClass === 'econom';
+				},
+				alcoholSelected() {
+					return this.businessClassTicket === 'alcohol'
+				},
+
+			},
+		});
+
+		app.mount('#app');
+	</script>
+
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<title>Задача 1</title>
+</head>
+<!-- Задача 1. Вводимо логіна і пароль. Якщо логін вірний відображаємо смайл. Якщо ні, то:
+	1) якщо логін = Іван – колір повідомлення про помилку синій
+	2) якщо хтось інший, то колір повідомлення червоний
+-->
+
+<body>
+	<style>
+		.is-ivan {
+			color: blue;
+		}
+
+		.error-message {
+			color: red;
+		}
+
+		.success {
+			color: green;
+		}
+	</style>
+	<div id="app">
+		<div>
+			<label>Login
+				<input type="text" v-model="userLogin">
+			</label>
+		</div>
+		<div>
+			<label>
+				Password
+				<input type="password" v-model="userPassword">
+			</label>
+		</div>
+		<button @click="correctLogin">Go</button>
+		<div :class="messageStyle">{{message}}</div>
+		<div v-if="authenticated">😊</div>
+	</div>
+	<script>
+		const { createApp } = Vue;
+
+		const arrOfData = [
+			{
+				login: "admin",
+				password: "123456"
+			},
+			{
+				login: "admin1",
+				password: "112233"
+			},
+			{
+				login: "admin2",
+				password: "123123"
+			},
+			{
+				login: "admin3",
+				password: "121212"
+			},
+		]
+
+		const app = createApp({
+			data() {
+				return {
+					userLogin: null,
+					userPassword: null,
+					message: '',
+					messageStyle: '',
+					authenticated: false,
+				}
+			},
+			methods: {
+				correctLogin() {
+					const userInputLogin = this.userLogin.toLowerCase();
+					const userData = arrOfData.find(data => data.login === userInputLogin);
+
+					if (userData && userData.password === this.userPassword) {
+						this.message = 'Успішний вхід!';
+						this.authenticated = true;
+						this.messageStyle = 'success';
+					} else if (userInputLogin === 'іван') {
+						this.message = 'Невірний пароль';
+						this.messageStyle = 'is-ivan';
+					} else {
+						this.message = 'Невірний логін або пароль';
+						this.messageStyle = 'error-message';
+					}
+				}
+			},
+		});
+
+
+		app.mount('#app');
+	</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<title>Задача 3</title>
+</head>
+<!-- Задача 3. 
+	Елемент тренажера англійської. Виводимо зображення елемента і слово. 
+	Користувач вводить відповідь. Якщо вірно – відтворюємо фразу «Добре. Молодець!» (і додаємо зелену рамку до елемента), якщо ні - то відтворюємо фразу «Невірно, спробуйте ще раз» (і додаємо червону рамку).
+
+========================================================-->
+
+<body>
+	<style>
+		.correct {
+			border: 2px solid green;
+
+		}
+
+		.incorrect {
+			border: 2px solid red;
+		}
+	</style>
+
+	<div id="app">
+		<div :class="cardStyle" style="max-width: 50%;">
+			<img :src="currentWord.image" alt="Зображення" style="width: 100%;">
+			<h2>{{currentWord.word}}</h2>
+			<label>Ваш переклад
+				<input v-model="userTranslate" type="text">
+			</label>
+			<button @click="verificationTranslate">Превірити</button>
+		</div>
+		<p>{{feedback}}</p>
+	</div>
+
+
+	<script>
+		const { createApp } = Vue;
+		const app = createApp({
+			data() {
+				return {
+					translateCards: [
+						{
+							id: 1,
+							word: 'football',
+							translate: "футбол",
+							image: 'https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&q=80&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9vdGJhbGwlMjB0cmFpbmluZ3xlbnwwfHwwfHx8MA%3D%3D&w=1000'
+						},
+						{
+							id: 2,
+							word: 'basketball',
+							translate: "баскетбол",
+							image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFza2V0YmFsbCUyMG5iYXxlbnwwfHwwfHx8MA%3D%3D'
+						},
+						{
+							id: 3,
+							word: 'tennis',
+							translate: "теніс",
+							image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Tennis_Racket_and_Balls.jpg/1200px-Tennis_Racket_and_Balls.jpg'
+						},
+						{
+							id: 4,
+							word: 'golf',
+							translate: "гольф",
+							image: 'https://www.realia.es/uploads/sizes/blog/blog/2020/jugar-a-golf.jpg'
+						},
+					],
+					wordID: 0,
+					feedback: '',
+					userTranslate: '',
+					cardStyle: '',
+				};
+			},
+			computed: {
+				currentWord() {
+					return this.translateCards[this.wordID];
+				},
+			},
+			methods: {
+				verificationTranslate() {
+					const correctAnswer = this.currentWord.translate.toLowerCase();
+
+					if (this.userTranslate.toLowerCase() === correctAnswer) {
+						this.feedback = "Добре.Молодець! Продовжуй!";
+						this.cardStyle = 'correct';
+					} else {
+						this.feedback = "Невірно, спробуйте ще раз";
+						this.cardStyle = 'incorrect';
+					};
+					this.wordID = (this.wordID + 1) % this.translateCards.length;
+					this.userTranslate = '';
+				},
+			},
+		});
+		app.mount('#app');
+	</script>
+
+</body>
+
+</html>
